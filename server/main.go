@@ -45,16 +45,18 @@ func NewCotacaoHandler(db *sql.DB) *CotacaoHandler {
 func main() {
 	db, err := sql.Open("sqlite3", "./data.db")
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer db.Close()
 	handler := NewCotacaoHandler(db)
 	mux := http.NewServeMux()
 	mux.HandleFunc("/cotacao", handler.GetCotacao)
-	http.ListenAndServe(":8080", mux)
+	log.Println("server listening in 8080")
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }
 
 func (h *CotacaoHandler) GetCotacao(w http.ResponseWriter, r *http.Request) {
+	log.Println("request received")
 	ctx, cancel := context.WithTimeout(r.Context(), 200*time.Millisecond)
 	defer cancel()
 	req, err := http.NewRequestWithContext(ctx, "GET", "https://economia.awesomeapi.com.br/json/last/USD-BRL", nil)

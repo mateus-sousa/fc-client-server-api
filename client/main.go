@@ -31,7 +31,7 @@ func main() {
 	}
 	if res.StatusCode != http.StatusOK {
 		err = errors.New("server url not found")
-		log.Println(err)
+		log.Println(err.Error())
 		panic(err)
 	}
 	var responseCotacao ResponseCotacao
